@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int maxProfit(vector<int>&st,vector<int>&et,vector<int>&profit,int i,vector<int>&dp)
+    {
+        if(i>=et.size()) return 0;
+        if(dp[i]!=-1) return dp[i];
+        int pick=0,notpick=0;
+        int in=lower_bound(st.begin(),st.end(),et[i])-st.begin();
+        pick+=profit[i]+maxProfit(st,et,profit,in,dp);
+        notpick+=maxProfit(st,et,profit,i+1,dp);
+
+        return dp[i]=max(pick,notpick);
+
+    }
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, 
+    vector<int>& profit) {
+        int n=startTime.size();
+        vector<int>dp(n+1,-1);
+        vector<pair<int,int>>temp;
+        vector<int>p;
+        vector<int>st;
+        vector<int>et;
+        for(int i=0;i<n;i++)
+        {
+            temp.push_back({startTime[i],i});
+        }
+        sort(temp.begin(),temp.end());
+        for(auto it:temp)
+        {
+            st.push_back(it.first);
+            et.push_back(endTime[it.second]);
+            p.push_back(profit[it.second]);
+        }
+        return maxProfit(st,et,p,0,dp);
+    }
+};
