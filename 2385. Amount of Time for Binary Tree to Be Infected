@@ -1,0 +1,69 @@
+class Solution {
+public:
+    void conversionFromTreeToGraph(TreeNode* root,
+    unordered_map<int,vector<int>>&graph)
+    {
+        if(root==NULL) return ;
+        if(root->left!=NULL)
+        {
+            int m=root->val;
+            int p=root->left->val;
+            graph[m].push_back(p);
+            graph[p].push_back(m);
+            conversionFromTreeToGraph(root->left,graph);
+        }
+        if(root->right!=NULL)
+        {
+            int m=root->val;
+            int p=root->right->val;
+            graph[m].push_back(p);
+            graph[p].push_back(m);
+            conversionFromTreeToGraph(root->right,graph);
+        }
+    }
+    int amountOfTime(TreeNode* root, int start) {
+        int n=0;
+        //inorder(root,n);
+        unordered_map<int,vector<int>>graph;
+        conversionFromTreeToGraph(root,graph);
+        queue<int>qu;
+        // for(auto it:graph)
+        // {
+        //     cout<<it.first<<" :";
+        //     for(auto itt:it.second)
+        //     {
+        //         cout<<itt<<" ";
+        //     }
+        //     cout<<endl;
+        // }
+        // cout<<"hi "<<endl;
+        qu.push(start);
+        int an=0;
+        set<int>st;
+        st.insert(start);
+        while(!qu.empty())
+        {
+            int s = qu.size();
+            an++;
+            while(s--){
+            int pk=qu.front();
+            //cout<<pk<<" ";
+            
+            qu.pop();
+            for(auto it:graph[pk])
+            {
+                if(st.find(it)==st.end())
+                {
+                   // cout<<it<<" ";
+                    qu.push(it);
+                    st.insert(it);
+                }
+                //cout<<endl;
+            }
+            }
+            //an++;
+
+        }
+        return an-1;
+    }
+};
